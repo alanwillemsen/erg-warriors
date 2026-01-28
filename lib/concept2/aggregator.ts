@@ -166,14 +166,16 @@ export async function getLeaderboardData(
 
   // Fetch data for all users in parallel
   const entries = await Promise.all(
-    linkedUsers.map((user) =>
-      fetchUserData(
-        user.discordId,
-        user.displayName || user.discordName, // Use displayName if set, otherwise discordName
-        user.discordAvatar || undefined,
-        dateRange
+    linkedUsers
+      .filter((user) => user.discordId && (user.displayName || user.discordName))
+      .map((user) =>
+        fetchUserData(
+          user.discordId!,
+          user.displayName || user.discordName || "Unknown",
+          user.discordAvatar || undefined,
+          dateRange
+        )
       )
-    )
   );
 
   // Filter out null entries and sort by total meters
