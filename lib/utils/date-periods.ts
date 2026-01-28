@@ -16,7 +16,7 @@ export function getWeekRange(): DateRange {
   const now = new Date();
   return {
     from: startOfWeek(now, { weekStartsOn: 1 }), // Monday
-    to: endOfWeek(now, { weekStartsOn: 1 }), // Sunday
+    to: now, // Only query up to today, not end of week
   };
 }
 
@@ -27,7 +27,7 @@ export function getMonthRange(): DateRange {
   const now = new Date();
   return {
     from: startOfMonth(now),
-    to: endOfMonth(now),
+    to: now, // Only query up to today, not end of month
   };
 }
 
