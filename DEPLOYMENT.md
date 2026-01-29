@@ -49,10 +49,10 @@ If using Neon (recommended):
    In Vercel Dashboard → Settings → Environment Variables, add:
 
    ```env
-   # Discord OAuth
+   # Discord OAuth (Production)
    DISCORD_CLIENT_ID=1465186912804536442
    DISCORD_CLIENT_SECRET=3tOeCivhHrkGtnuzyp0dUgelo9SsQtkI
-   DISCORD_SERVER_ID=1466219412519522346
+   DISCORD_SERVER_ID=1045798370746302594
 
    # Concept2 OAuth
    CONCEPT2_CLIENT_ID=oo0IKfRbbdYfUgfdXDBi6L8vKqIJP584EgVJqC6Z
