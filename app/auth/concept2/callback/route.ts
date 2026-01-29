@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     // Exchange code for tokens
     const tokens = await exchangeCodeForToken(code);
 
-    // Get Concept2 user ID
+    // Get Concept2 user profile
     const client = new Concept2Client(tokens.access_token);
     const concept2User = await client.getMe();
 
@@ -64,6 +64,13 @@ export async function GET(request: NextRequest) {
       refresh_token: tokens.refresh_token,
       expires_at: Math.floor(Date.now() / 1000) + tokens.expires_in,
       concept2_user_id: concept2User.user_id,
+    });
+
+    // Update user with gender from Concept2 profile
+    const { prisma } = await import("@/lib/db/client");
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { gender: concept2User.gender },
     });
 
     // Redirect to main page

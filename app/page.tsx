@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
 import { TimePeriodSelector } from "@/components/leaderboard/TimePeriodSelector";
 import { StatsCards } from "@/components/leaderboard/StatsCards";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { RefreshCw, LogOut, User } from "lucide-react";
 import { signOut } from "next-auth/react";
 import type { TimePeriod, LeaderboardEntry } from "@/lib/concept2/types";
@@ -51,17 +52,18 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950">
       <div className="max-w-7xl mx-auto p-4 md:p-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-bold mb-2">{APP_NAME}</h1>
+            <h1 className="text-4xl font-bold mb-2 text-black dark:text-white">{APP_NAME}</h1>
             <p className="text-muted-foreground">
               Welcome back, {session.user.discordName}!
             </p>
           </div>
           <div className="flex gap-2">
+            <ThemeToggle />
             <Button
               variant="outline"
               size="icon"
@@ -88,17 +90,17 @@ export default function Home() {
 
         {/* Concept2 Link Banner */}
         {!session.user.hasConcept2Linked && (
-          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-950/20 border-2 border-[#FED34C] dark:border-[#EAAB00] rounded-lg">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                <h3 className="font-bold text-black dark:text-yellow-50 mb-1">
                   Link Your Concept2 Account
                 </h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Connect your Concept2 Logbook to appear on the leaderboard and compete with others.
                 </p>
                 <Link href="/onboarding">
-                  <Button size="sm">
+                  <Button size="sm" className="bg-[#FED34C] hover:bg-[#EAAB00] text-black font-semibold">
                     Link Concept2 Account
                   </Button>
                 </Link>
@@ -132,8 +134,8 @@ export default function Home() {
         )}
 
         {/* Leaderboard Table */}
-        <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Rankings</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border-t-4 border-[#FED34C] p-6">
+          <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Rankings</h2>
           <LeaderboardTable entries={data || []} isLoading={isLoading} />
         </div>
       </div>

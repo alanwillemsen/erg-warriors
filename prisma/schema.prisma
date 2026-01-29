@@ -20,6 +20,7 @@ model User {
   discordName       String?
   discordAvatar     String?
   displayName       String?   // Custom display name for leaderboard
+  gender            String?   // Gender from Concept2 profile
   showOnLeaderboard Boolean   @default(true) // Opt-in/out of leaderboard
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt

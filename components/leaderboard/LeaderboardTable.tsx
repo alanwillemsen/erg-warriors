@@ -11,17 +11,23 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { LeaderboardEntry } from "@/lib/concept2/types";
 import { format } from "date-fns";
 import Image from "next/image";
-import { Trophy, Medal, Award, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { Trophy, Medal, Award, ArrowUpDown, ArrowUp, ArrowDown, Info } from "lucide-react";
 
 interface LeaderboardTableProps {
   entries: LeaderboardEntry[];
   isLoading?: boolean;
 }
 
-type SortColumn = "rank" | "discordName" | "totalMeters" | "workoutCount" | "totalHours" | "lastWorkout";
+type SortColumn = "rank" | "discordName" | "gender" | "totalMeters" | "workoutCount" | "totalHours" | "totalCalories" | "fatBurned" | "lastWorkout";
 type SortDirection = "asc" | "desc";
 
 export function LeaderboardTable({
@@ -54,6 +60,10 @@ export function LeaderboardTable({
           aValue = a.discordName.toLowerCase();
           bValue = b.discordName.toLowerCase();
           break;
+        case "gender":
+          aValue = (a.gender || "").toLowerCase();
+          bValue = (b.gender || "").toLowerCase();
+          break;
         case "totalMeters":
           aValue = a.totalMeters;
           bValue = b.totalMeters;
@@ -65,6 +75,14 @@ export function LeaderboardTable({
         case "totalHours":
           aValue = a.totalHours;
           bValue = b.totalHours;
+          break;
+        case "totalCalories":
+          aValue = a.totalCalories;
+          bValue = b.totalCalories;
+          break;
+        case "fatBurned":
+          aValue = a.totalCalories / 3500;
+          bValue = b.totalCalories / 3500;
           break;
         case "lastWorkout":
           aValue = a.lastWorkout ? new Date(a.lastWorkout).getTime() : 0;
@@ -106,23 +124,31 @@ export function LeaderboardTable({
   }
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead
-              className="w-16 cursor-pointer hover:bg-muted/50"
-              onClick={() => handleSort("rank")}
-            >
-              Rank
-              <SortIcon column="rank" />
-            </TableHead>
+    <TooltipProvider>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead
+                className="w-16 cursor-pointer hover:bg-muted/50"
+                onClick={() => handleSort("rank")}
+              >
+                Rank
+                <SortIcon column="rank" />
+              </TableHead>
             <TableHead
               className="cursor-pointer hover:bg-muted/50"
               onClick={() => handleSort("discordName")}
             >
               Athlete
               <SortIcon column="discordName" />
+            </TableHead>
+            <TableHead
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => handleSort("gender")}
+            >
+              Gender
+              <SortIcon column="gender" />
             </TableHead>
             <TableHead
               className="text-right cursor-pointer hover:bg-muted/50"
@@ -147,6 +173,31 @@ export function LeaderboardTable({
             </TableHead>
             <TableHead
               className="text-right cursor-pointer hover:bg-muted/50"
+              onClick={() => handleSort("totalCalories")}
+            >
+              Total Calories
+              <SortIcon column="totalCalories" />
+            </TableHead>
+            <TableHead
+              className="text-right cursor-pointer hover:bg-muted/50"
+              onClick={() => handleSort("fatBurned")}
+            >
+              <div className="flex items-center justify-end gap-1">
+                Fat Burned (lbs)
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">Estimated pounds of fat burned</p>
+                    <p className="text-xs text-muted-foreground">Based on 3,500 calories per pound</p>
+                  </TooltipContent>
+                </Tooltip>
+                <SortIcon column="fatBurned" />
+              </div>
+            </TableHead>
+            <TableHead
+              className="text-right cursor-pointer hover:bg-muted/50"
               onClick={() => handleSort("lastWorkout")}
             >
               Last Workout
@@ -159,10 +210,10 @@ export function LeaderboardTable({
             <TableRow key={entry.discordId}>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  {entry.rank === 1 && <Trophy className="h-5 w-5 text-yellow-500" />}
+                  {entry.rank === 1 && <Trophy className="h-5 w-5 text-[#FED34C]" />}
                   {entry.rank === 2 && <Medal className="h-5 w-5 text-gray-400" />}
-                  {entry.rank === 3 && <Award className="h-5 w-5 text-amber-600" />}
-                  <span className="font-medium">{entry.rank}</span>
+                  {entry.rank === 3 && <Award className="h-5 w-5 text-[#EAAB00]" />}
+                  <span className="font-bold">{entry.rank}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -183,6 +234,11 @@ export function LeaderboardTable({
                   <span className="font-medium">{entry.discordName}</span>
                 </div>
               </TableCell>
+              <TableCell>
+                <Badge variant="outline">
+                  {entry.gender ? entry.gender.charAt(0).toUpperCase() + entry.gender.slice(1) : "N/A"}
+                </Badge>
+              </TableCell>
               <TableCell className="text-right font-semibold">
                 {entry.totalMeters.toLocaleString()}
               </TableCell>
@@ -191,6 +247,12 @@ export function LeaderboardTable({
               </TableCell>
               <TableCell className="text-right">
                 {entry.totalHours.toFixed(1)}
+              </TableCell>
+              <TableCell className="text-right font-semibold">
+                {entry.totalCalories.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {(entry.totalCalories / 3500).toFixed(1)}
               </TableCell>
               <TableCell className="text-right text-sm text-muted-foreground">
                 {entry.lastWorkout
@@ -202,6 +264,7 @@ export function LeaderboardTable({
         </TableBody>
       </Table>
     </div>
+    </TooltipProvider>
   );
 }
 

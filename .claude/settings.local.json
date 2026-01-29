@@ -13,7 +13,15 @@
       "Bash(npx prisma:*)",
       "WebFetch(domain:192.168.86.43)",
       "Bash(curl:*)",
-      "Bash(npm run dev:https:*)"
+      "Bash(npm run dev:https:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(ls:*)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma migrate reset:*)",
+      "Bash(pkill:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:uwaterloo.ca)"
     ]
   }
 }

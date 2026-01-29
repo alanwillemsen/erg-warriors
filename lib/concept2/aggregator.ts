@@ -15,6 +15,7 @@ export function aggregateResults(results: Concept2Result[]): {
   totalMeters: number;
   workoutCount: number;
   totalHours: number;
+  totalCalories: number;
   lastWorkout?: string;
 } {
   if (results.length === 0) {
@@ -22,6 +23,7 @@ export function aggregateResults(results: Concept2Result[]): {
       totalMeters: 0,
       workoutCount: 0,
       totalHours: 0,
+      totalCalories: 0,
     };
   }
 
@@ -37,6 +39,12 @@ export function aggregateResults(results: Concept2Result[]): {
   );
   const totalHours = totalDeciseconds / 36000; // 10 deciseconds per second * 3600 seconds per hour
 
+  // Calculate total calories
+  const totalCalories = results.reduce(
+    (sum, result) => sum + (result.calories_total || 0),
+    0
+  );
+
   // Sort by date to get last workout
   const sortedResults = [...results].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -46,6 +54,7 @@ export function aggregateResults(results: Concept2Result[]): {
     totalMeters,
     workoutCount: results.length,
     totalHours,
+    totalCalories,
     lastWorkout: sortedResults[0]?.date,
   };
 }
@@ -111,6 +120,7 @@ async function fetchUserData(
   discordId: string,
   discordName: string,
   discordAvatar: string | undefined,
+  gender: string | undefined,
   dateRange: DateRange
 ): Promise<LeaderboardEntry | null> {
   try {
@@ -132,6 +142,7 @@ async function fetchUserData(
       discordId,
       discordName,
       discordAvatar,
+      gender,
       ...stats,
     };
   } catch (error) {
@@ -173,6 +184,7 @@ export async function getLeaderboardData(
           user.discordId!,
           user.displayName || user.discordName || "Unknown",
           user.discordAvatar || undefined,
+          user.gender || undefined,
           dateRange
         )
       )

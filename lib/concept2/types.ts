@@ -19,6 +19,7 @@ export const Concept2UserSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
   email: z.string().optional(),
+  gender: z.string().optional(),
 }).transform((data) => {
   // Handle both user_id and id fields, convert to string
   const userId = data.user_id || data.id;
@@ -31,6 +32,7 @@ export const Concept2UserSchema = z.object({
     first_name: data.first_name,
     last_name: data.last_name,
     email: data.email,
+    gender: data.gender,
   };
 });
 
@@ -44,6 +46,7 @@ export const Concept2ResultSchema = z.object({
   distance: z.number(),
   type: z.string(),
   time: z.number().optional(),
+  calories_total: z.number().optional(),
   workout_type: z.string().optional(),
   source: z.string().optional(),
   weight_class: z.string().optional(),
@@ -79,9 +82,11 @@ export interface LeaderboardEntry {
   discordId: string;
   discordName: string;
   discordAvatar?: string;
+  gender?: string;
   totalMeters: number;
   workoutCount: number;
   totalHours: number;
+  totalCalories: number;
   lastWorkout?: string;
 }
 
