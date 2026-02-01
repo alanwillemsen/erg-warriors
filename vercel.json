@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/discord/weekly-summary",
-      "schedule": "0 17 * * 0"
+      "schedule": "0 14 * * 1"
     }
   ]
 }

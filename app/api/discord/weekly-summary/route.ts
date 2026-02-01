@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLeaderboardData } from "@/lib/concept2/aggregator";
-import { startOfWeek, endOfWeek } from "date-fns";
+import { startOfWeek, endOfWeek, subWeeks } from "date-fns";
 
 // Simple authentication - you can make this more secure
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "change-me-in-production";
@@ -41,10 +41,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get this week's data
+    // Get last week's data (previous Monday to Sunday)
     const now = new Date();
-    const weekStart = startOfWeek(now, { weekStartsOn: 1 }); // Monday
-    const weekEnd = endOfWeek(now, { weekStartsOn: 1 }); // Sunday
+    const lastWeek = subWeeks(now, 1);
+    const weekStart = startOfWeek(lastWeek, { weekStartsOn: 1 }); // Last Monday
+    const weekEnd = endOfWeek(lastWeek, { weekStartsOn: 1 }); // Last Sunday
 
     const leaderboard = await getLeaderboardData({
       from: weekStart,
@@ -62,9 +63,9 @@ export async function GET(request: NextRequest) {
     const men = leaderboard.filter(e => e.gender?.toLowerCase() === 'm' || e.gender?.toLowerCase() === 'male');
     const women = leaderboard.filter(e => e.gender?.toLowerCase() === 'f' || e.gender?.toLowerCase() === 'female');
 
-    // Get top 3 for each
-    const topMen = men.slice(0, 3);
-    const topWomen = women.slice(0, 3);
+    // Get top 3 for each, excluding anyone with zero meters
+    const topMen = men.slice(0, 3).filter(e => e.totalMeters > 0);
+    const topWomen = women.slice(0, 3).filter(e => e.totalMeters > 0);
 
     // Format Discord message
     const medals = ["🥇", "🥈", "🥉"];
@@ -101,7 +102,7 @@ export async function GET(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://your-app-url.vercel.app";
 
     const embed = {
-      title: "🏆 Top Rowers This Week",
+      title: "🏆 Top Rowers Last Week",
       description: description + `\n\n[📊 View Full Leaderboard](${appUrl})`,
       color: 0x5865f2, // Discord blurple
       footer: {
