@@ -18,7 +18,7 @@ export default function SignIn() {
         <CardContent className="space-y-4">
           <Button
             onClick={() => signIn("discord", { callbackUrl: "/" })}
-            className="w-full"
+            className="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white"
             size="lg"
           >
             <svg

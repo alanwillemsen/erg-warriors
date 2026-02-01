@@ -210,9 +210,9 @@ export function LeaderboardTable({
             <TableRow key={entry.discordId}>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  {entry.rank === 1 && <Trophy className="h-5 w-5 text-[#FED34C]" />}
+                  {entry.rank === 1 && <Trophy className="h-5 w-5 text-yellow-500" />}
                   {entry.rank === 2 && <Medal className="h-5 w-5 text-gray-400" />}
-                  {entry.rank === 3 && <Award className="h-5 w-5 text-[#EAAB00]" />}
+                  {entry.rank === 3 && <Award className="h-5 w-5 text-red-500" />}
                   <span className="font-bold">{entry.rank}</span>
                 </div>
               </TableCell>

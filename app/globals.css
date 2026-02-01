@@ -4,66 +4,69 @@
 
 @layer base {
   :root {
-    /* UWaterloo Brand Colors */
-    --uw-gold: 45 100% 65%; /* #FED34C */
-    --uw-gold-light: 53 91% 81%; /* #F2EDA8 */
-    --uw-gold-dark: 44 100% 46%; /* #EAAB00 */
-    --uw-black: 0 0% 0%; /* #000000 */
-    --uw-grey-light: 0 0% 87%; /* #DFDFDF */
-    --uw-grey-medium: 0 0% 47%; /* #787878 */
+    /* CRC Brand Colors - Red, Yellow, Black */
+    --crc-red: 0 100% 50%; /* #FF0000 - Canadian Red */
+    --crc-red-light: 0 100% 65%; /* #FF5252 - Lighter red */
+    --crc-red-dark: 0 85% 40%; /* #D60000 - Darker red */
+    --crc-yellow: 45 100% 50%; /* #FFCC00 - Gold/Yellow */
+    --crc-yellow-light: 48 100% 70%; /* #FFE666 */
+    --crc-yellow-dark: 45 100% 35%; /* #B38F00 */
+    --crc-black: 0 0% 0%; /* #000000 */
+    --crc-grey-light: 0 0% 87%; /* #DFDFDF */
+    --crc-grey-medium: 0 0% 47%; /* #787878 */
 
     --background: 0 0% 100%;
-    --foreground: var(--uw-black);
+    --foreground: var(--crc-black);
     --card: 0 0% 100%;
-    --card-foreground: var(--uw-black);
+    --card-foreground: var(--crc-black);
     --popover: 0 0% 100%;
-    --popover-foreground: var(--uw-black);
-    --primary: var(--uw-gold);
-    --primary-foreground: var(--uw-black);
-    --secondary: var(--uw-grey-light);
-    --secondary-foreground: var(--uw-black);
+    --popover-foreground: var(--crc-black);
+    --primary: var(--crc-red);
+    --primary-foreground: 0 0% 100%;
+    --secondary: var(--crc-grey-light);
+    --secondary-foreground: var(--crc-black);
     --muted: 0 0% 96%;
-    --muted-foreground: var(--uw-grey-medium);
-    --accent: var(--uw-gold-light);
-    --accent-foreground: var(--uw-black);
+    --muted-foreground: var(--crc-grey-medium);
+    --accent: var(--crc-yellow);
+    --accent-foreground: var(--crc-black);
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: var(--uw-grey-light);
-    --input: var(--uw-grey-light);
-    --ring: var(--uw-gold);
+    --border: var(--crc-grey-light);
+    --input: var(--crc-grey-light);
+    --ring: var(--crc-red);
     --radius: 0.5rem;
-    --chart-1: var(--uw-gold);
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: var(--crc-red);
+    --chart-2: var(--crc-yellow);
+    --chart-3: 0 0% 20%;
+    --chart-4: 0 70% 60%;
+    --chart-5: 45 90% 60%;
   }
 
   .dark {
-    --background: var(--uw-black);
+    --background: var(--crc-black);
     --foreground: 0 0% 98%;
     --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
-    --primary: var(--uw-gold);
-    --primary-foreground: var(--uw-black);
+    --primary: var(--crc-red);
+    --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 64%;
-    --accent: var(--uw-gold-dark);
-    --accent-foreground: 0 0% 98%;
+    --accent: var(--crc-yellow);
+    --accent-foreground: var(--crc-black);
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: var(--uw-gold);
-    --chart-1: var(--uw-gold);
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --ring: var(--crc-red);
+    --chart-1: var(--crc-red);
+    --chart-2: var(--crc-yellow);
+    --chart-3: 0 0% 40%;
+    --chart-4: 0 80% 55%;
+    --chart-5: 45 90% 60%;
   }
 }
 

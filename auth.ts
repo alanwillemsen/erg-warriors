@@ -65,12 +65,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // Only update if the user doesn't already have a discordId set
           if (!existingUser?.discordId) {
             try {
+              const discordUsername = (profile as any).username || user.name || "Unknown";
               await prisma.user.update({
                 where: { id: user.id },
                 data: {
                   discordId: account.providerAccountId,
-                  discordName: (profile as any).username || user.name || "Unknown",
+                  discordName: discordUsername,
                   discordAvatar: (profile as any).avatar || null,
+                  displayName: existingUser?.displayName || discordUsername,
                 },
               });
             } catch (error) {

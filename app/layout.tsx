@@ -5,7 +5,7 @@ import { SessionProvider } from "@/components/providers/SessionProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { APP_NAME } from "@/lib/config";
 
-// UWaterloo brand font: Barlow Condensed (alternative to Bureau Grotesque)
+// Clean, modern font: Barlow Condensed
 const barlowCondensed = Barlow_Condensed({
   weight: ["400", "600", "700"],
   subsets: ["latin"],
@@ -14,7 +14,7 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata: Metadata = {
   title: APP_NAME,
-  description: "University of Waterloo Rowing Team leaderboard - Track and compare rowing meters",
+  description: "Cambridge Rowing Club Grand Standings - Track and compare rowing meters",
 };
 
 export default function RootLayout({

@@ -14,7 +14,7 @@ export function LinkConcept2() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Button asChild size="lg">
+        <Button asChild size="lg" className="bg-[#7CAB68] hover:bg-[#6A9458] text-white">
           <a href="/auth/concept2/link">
             <Link2 className="mr-2 h-5 w-5" />
             Link Concept2 Account
