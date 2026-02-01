@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLeaderboardData } from "@/lib/concept2/aggregator";
 import { startOfWeek, endOfWeek, subWeeks } from "date-fns";
-import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 
 // Simple authentication - you can make this more secure
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "change-me-in-production";
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     // Get last week's data (previous Monday to Sunday) in EST
     const timezone = "America/New_York";
     const nowUtc = new Date();
-    const nowEst = utcToZonedTime(nowUtc, timezone);
+    const nowEst = toZonedTime(nowUtc, timezone);
 
     // Calculate last week in EST
     const lastWeekEst = subWeeks(nowEst, 1);
@@ -53,8 +53,8 @@ export async function GET(request: NextRequest) {
     const weekEndEst = endOfWeek(lastWeekEst, { weekStartsOn: 1 }); // Last Sunday 23:59:59 EST
 
     // Convert back to UTC for the API query
-    const weekStart = zonedTimeToUtc(weekStartEst, timezone);
-    const weekEnd = zonedTimeToUtc(weekEndEst, timezone);
+    const weekStart = fromZonedTime(weekStartEst, timezone);
+    const weekEnd = fromZonedTime(weekEndEst, timezone);
 
     const leaderboard = await getLeaderboardData({
       from: weekStart,
