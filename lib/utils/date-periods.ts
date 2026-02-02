@@ -7,27 +7,40 @@ import {
   endOfYear,
   subDays,
 } from "date-fns";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import type { DateRange, TimePeriod } from "@/lib/concept2/types";
 
+const EST_TIMEZONE = "America/New_York";
+
 /**
- * Get date range for the current week (Monday - Sunday)
+ * Get date range for the current week (Monday - Sunday) in EST
  */
 export function getWeekRange(): DateRange {
-  const now = new Date();
+  const nowUtc = new Date();
+  const nowEst = toZonedTime(nowUtc, EST_TIMEZONE);
+
+  const weekStartEst = startOfWeek(nowEst, { weekStartsOn: 1 }); // Monday 00:00 EST
+  const weekStart = fromZonedTime(weekStartEst, EST_TIMEZONE);
+
   return {
-    from: startOfWeek(now, { weekStartsOn: 1 }), // Monday
-    to: now, // Only query up to today, not end of week
+    from: weekStart,
+    to: nowUtc, // Only query up to now
   };
 }
 
 /**
- * Get date range for the current month
+ * Get date range for the current month in EST
  */
 export function getMonthRange(): DateRange {
-  const now = new Date();
+  const nowUtc = new Date();
+  const nowEst = toZonedTime(nowUtc, EST_TIMEZONE);
+
+  const monthStartEst = startOfMonth(nowEst);
+  const monthStart = fromZonedTime(monthStartEst, EST_TIMEZONE);
+
   return {
-    from: startOfMonth(now),
-    to: now, // Only query up to today, not end of month
+    from: monthStart,
+    to: nowUtc, // Only query up to now
   };
 }
 
