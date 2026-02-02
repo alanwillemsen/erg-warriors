@@ -2,16 +2,19 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
 import { TimePeriodSelector } from "@/components/leaderboard/TimePeriodSelector";
+import { GenderFilter } from "@/components/leaderboard/GenderFilter";
 import { StatsCards } from "@/components/leaderboard/StatsCards";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { RefreshCw, LogOut, User } from "lucide-react";
 import { signOut } from "next-auth/react";
 import type { TimePeriod, LeaderboardEntry } from "@/lib/concept2/types";
+import type { GenderFilter as GenderFilterType } from "@/lib/utils/gender";
+import { normalizeGender } from "@/lib/utils/gender";
 import Link from "next/link";
 import Image from "next/image";
 import { APP_NAME } from "@/lib/config";
@@ -22,6 +25,7 @@ export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [period, setPeriod] = useState<TimePeriod>("week");
+  const [genderFilter, setGenderFilter] = useState<GenderFilterType>("all");
   const [refreshKey, setRefreshKey] = useState(0);
 
   const { data, error, isLoading, mutate } = useSWR<LeaderboardEntry[]>(
@@ -32,6 +36,24 @@ export default function Home() {
       revalidateOnFocus: true,
     }
   );
+
+  // Filter and re-rank entries based on selected gender
+  const filteredEntries = useMemo(() => {
+    if (!data) return [];
+
+    let filtered = data;
+    if (genderFilter === "male") {
+      filtered = data.filter((e) => normalizeGender(e.gender) === "male");
+    } else if (genderFilter === "female") {
+      filtered = data.filter((e) => normalizeGender(e.gender) === "female");
+    }
+
+    // Re-rank within filtered group
+    return filtered.map((entry, index) => ({
+      ...entry,
+      rank: index + 1,
+    }));
+  }, [data, genderFilter]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -127,10 +149,18 @@ export default function Home() {
           />
         </div>
 
+        {/* Gender Filter */}
+        <div className="mb-6">
+          <GenderFilter
+            selectedGender={genderFilter}
+            onGenderChange={setGenderFilter}
+          />
+        </div>
+
         {/* Stats Cards */}
-        {data && data.length > 0 && (
+        {filteredEntries && filteredEntries.length > 0 && (
           <div className="mb-8">
-            <StatsCards entries={data} />
+            <StatsCards entries={filteredEntries} />
           </div>
         )}
 
@@ -146,7 +176,7 @@ export default function Home() {
         {/* Leaderboard Table */}
         <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg border-t-4 border-red-500 p-6">
           <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Rankings</h2>
-          <LeaderboardTable entries={data || []} isLoading={isLoading} />
+          <LeaderboardTable entries={filteredEntries || []} isLoading={isLoading} />
         </div>
       </div>
     </main>
