@@ -190,9 +190,9 @@ export async function getLeaderboardData(
       )
   );
 
-  // Filter out null entries and sort by total meters
+  // Filter out null entries and entries with zero meters, then sort by total meters
   const validEntries = entries.filter(
-    (entry): entry is LeaderboardEntry => entry !== null
+    (entry): entry is LeaderboardEntry => entry !== null && entry.totalMeters > 0
   );
 
   validEntries.sort((a, b) => b.totalMeters - a.totalMeters);
